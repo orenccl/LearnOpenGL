@@ -20,7 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
-    <ClCompile Include="src\hello\helloTwoDiffTriangle.cpp" />
+    <ClCompile Include="src\Hello\HelloRectangle.cpp" />
+    <ClCompile Include="src\Hello\HelloTriangle.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Hello\HelloRectangle.h" />
+    <ClInclude Include="src\Hello\HelloTriangle.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

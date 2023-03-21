@@ -1,0 +1,4 @@
+namespace HelloRectangle
+{
+    int Main();
+};

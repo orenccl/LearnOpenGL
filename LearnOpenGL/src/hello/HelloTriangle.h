@@ -1,0 +1,4 @@
+namespace HelloTriangle
+{
+    int Main();
+};
