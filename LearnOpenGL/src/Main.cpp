@@ -1,5 +1,5 @@
-#include "Hello/HelloRectangle.h"
-#include "Hello/HelloTriangle.h"
+#include "HelloWorld/HelloRectangle.h"
+#include "HelloWorld/HelloTriangle.h"
 
 int main()
 {
