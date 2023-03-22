@@ -1,7 +1,8 @@
-#include "HelloWorld/HelloRectangle.h"
-#include "HelloWorld/HelloTriangle.h"
+#include "HelloTriangle/HelloTriangle.h"
+#include <math.h>
 
 int main()
 {
+    floor(0.332);
     return HelloTriangle::Main();
 }

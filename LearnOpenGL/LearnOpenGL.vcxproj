@@ -20,20 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
-    <ClCompile Include="src\HelloWorld\HelloRectangle.cpp" />
-    <ClCompile Include="src\HelloWorld\HelloTriangle.cpp" />
+    <ClCompile Include="src\HelloTriangle\HelloTriangle.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\HelloWorld\HelloRectangle.h" />
-    <ClInclude Include="src\HelloWorld\HelloTriangle.h" />
+    <ClInclude Include="src\HelloTriangle\HelloTriangle.h" />
     <ClInclude Include="src\Shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\Shaders\Shader.vs" />
-    <None Include="src\Shaders\Shader1.fs" />
-    <None Include="src\Shaders\Shader2.fs" />
+    <None Include="shaders\VertexShaders\Shader.vs" />
+    <None Include="shaders\FragmentShaders\Shader1.fs" />
+    <None Include="shaders\FragmentShaders\Shader2.fs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

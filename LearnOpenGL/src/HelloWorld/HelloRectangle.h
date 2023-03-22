@@ -1,4 +1,0 @@
-namespace HelloRectangle
-{
-    int Main();
-};
