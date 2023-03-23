@@ -1,8 +1,10 @@
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 #include "HelloTriangle/HelloTriangle.h"
-#include <math.h>
+#include "Textures/Textures.h"
 
 int main()
 {
-    floor(0.332);
-    return HelloTriangle::Main();
+    return Textures::Main();
 }

@@ -1,0 +1,4 @@
+namespace Textures
+{
+    int Main();
+};

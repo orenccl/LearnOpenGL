@@ -17,7 +17,6 @@ namespace HelloTriangle
     int Main()
     {
         // glfw: initialize and configure
-        // ------------------------------
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -28,7 +27,6 @@ namespace HelloTriangle
 #endif
 
         // glfw window creation
-        // --------------------
         GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
         if (window == NULL)
         {
@@ -40,18 +38,16 @@ namespace HelloTriangle
         glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
         // glad: load all OpenGL function pointers
-        // ---------------------------------------
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
         {
             std::cout << "Failed to initialize GLAD" << std::endl;
             return -1;
         }
 
-        Shader firstShader("shaders/VertexShaders/Shader.vs", "shaders/FragmentShaders/Shader1.fs");
-        Shader secondShader("shaders/VertexShaders/Shader.vs", "shaders/FragmentShaders/Shader2.fs");
+        Shader firstShader("shaders/VertexShaders/HelloTriangle.vs", "shaders/FragmentShaders/HelloTriangle1.fs");
+        Shader secondShader("shaders/VertexShaders/HelloTriangle.vs", "shaders/FragmentShaders/HelloTriangle2.fs");
 
         // Set up vertex and indices data (and buffer(s)) and configure vertex attributes
-        // ------------------------------------------------------------------
         float firstTriangle[] = {
             // positions            // color start      // color middle     // color end
              -0.25f,  0.3f, 0.0f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f, 0.0f,// top
@@ -95,18 +91,13 @@ namespace HelloTriangle
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
-        float gradientStopTime = -glfwGetTime();
-        float gradientValue = 0;
         // render loop
-        // -----------
         while (!glfwWindowShouldClose(window))
         {
             // input
-            // -----
             processInput(window);
 
             // render
-            // ------
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
@@ -114,23 +105,11 @@ namespace HelloTriangle
 
             // draw our first triangle
             firstShader.use();
+            firstShader.setFloat("gradientValue", fmod(time, 3));
 
-            // stop 0.4 secs
-            if (time - gradientStopTime > 0.4) {
-                // interval 0.02
-                gradientValue += 0.02;
-                // cyclic from 0 to 3
-                float cyclicNumber = fmod(gradientValue, 3);
-                firstShader.setFloat("gradientValue", cyclicNumber);
-
-                // stop when cyclicNumber is interger
-                if (cyclicNumber - floor(cyclicNumber) < 0.02) {
-                    gradientStopTime = time;
-                }
-            }
             // only have a single VAO there's no need to bind it every time, but do so to keep things a bit more organized
             glBindVertexArray(VAOs[0]);
-            // draw rectangle
+            // draw triangle
             glDrawArrays(GL_TRIANGLES, 0, 3);
 
             // be sure to activate the shader
@@ -145,24 +124,20 @@ namespace HelloTriangle
             glDrawArrays(GL_TRIANGLES, 0, 3);
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-            // -------------------------------------------------------------------------------
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
 
         // optional: de-allocate all resources once they've outlived their purpose:
-        // ------------------------------------------------------------------------
         glDeleteVertexArrays(2, VAOs);
         glDeleteBuffers(2, VBOs);
 
         // glfw: terminate, clearing all previously allocated GLFW resources.
-        // ------------------------------------------------------------------
         glfwTerminate();
         return 0;
     }
 
     // glfw: whenever the window size changed (by OS or user resize) this callback function executes
-    // ---------------------------------------------------------------------------------------------
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {
         // make sure the viewport matches the new window dimensions; note that width and 
@@ -171,7 +146,6 @@ namespace HelloTriangle
     }
 
     // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-    // ---------------------------------------------------------------------------------------------------------
     void processInput(GLFWwindow* window)
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
