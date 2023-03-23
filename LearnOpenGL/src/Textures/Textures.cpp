@@ -15,6 +15,9 @@ namespace Textures
     const unsigned int SCR_WIDTH = 800;
     const unsigned int SCR_HEIGHT = 600;
 
+    // stores how much we're seeing of either texture
+    float mixValue = 0.2f;
+
     int Main()
     {
         // glfw: initialize and configure
@@ -51,10 +54,10 @@ namespace Textures
         // Set up vertex and indices data (and buffer(s)) and configure vertex attributes
         float vertices[] = {
             // positions        // colors           // texture coords
-            0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-            0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+            0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   2.0f, 2.0f, // top right
+            0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   2.0f, 0.0f, // bottom right
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-            -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+            -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f,   0.0f, 2.0f  // top left 
         };
 
         unsigned int indices[] = {
@@ -92,11 +95,11 @@ namespace Textures
         glGenTextures(1, &texture0);
         glBindTexture(GL_TEXTURE_2D, texture0); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
         // set the texture wrapping parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
         // set texture filtering parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         // load image, create texture and generate mipmaps
         int width, height, nrChannels;
         // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
@@ -117,8 +120,8 @@ namespace Textures
         glGenTextures(1, &texture1);
         glBindTexture(GL_TEXTURE_2D, texture1); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
         // set the texture wrapping parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         // set texture filtering parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -140,6 +143,7 @@ namespace Textures
         // activate the shader before setting uniforms!
         shader.use();
         glUniform1i(glGetUniformLocation(shader.ID, "texture0"), 0); // set it manually
+        // shader.setInt("texture0", 0); // or with shader class
         glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 1); // set it manually
         // shader.setInt("texture1", 1); // or with shader class
 
@@ -162,6 +166,8 @@ namespace Textures
 
             // render container
             shader.use();
+            shader.setFloat("mixValue", mixValue);
+
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -193,5 +199,18 @@ namespace Textures
     {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
+
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        {
+            mixValue += 0.01f; // change this value accordingly (might be too slow or too fast based on system hardware)
+            if (mixValue >= 1.0f)
+                mixValue = 1.0f;
+        }
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        {
+            mixValue -= 0.01f; // change this value accordingly (might be too slow or too fast based on system hardware)
+            if (mixValue <= 0.0f)
+                mixValue = 0.0f;
+        }
     }
 }
