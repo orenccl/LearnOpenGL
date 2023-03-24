@@ -1,6 +1,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 #include "Textures.h"
@@ -146,6 +149,16 @@ namespace Textures
         // shader.setInt("texture0", 0); // or with shader class
         glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 1); // set it manually
         // shader.setInt("texture1", 1); // or with shader class
+
+        // initial identity matrix
+        glm::mat4 trans = glm::mat4(1.0f);
+        // rotate z 90 degree
+        trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+        // scale all by 0.5
+        trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+
+        unsigned int transformLoc = glGetUniformLocation(shader.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
         // render loop
         while (!glfwWindowShouldClose(window))
