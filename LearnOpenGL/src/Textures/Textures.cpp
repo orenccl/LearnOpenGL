@@ -150,16 +150,6 @@ namespace Textures
         glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 1); // set it manually
         // shader.setInt("texture1", 1); // or with shader class
 
-        // initial identity matrix
-        glm::mat4 trans = glm::mat4(1.0f);
-        // rotate z 90 degree
-        trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-        // scale all by 0.5
-        trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
-
-        unsigned int transformLoc = glGetUniformLocation(shader.ID, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-
         // render loop
         while (!glfwWindowShouldClose(window))
         {
@@ -181,7 +171,28 @@ namespace Textures
             shader.use();
             shader.setFloat("mixValue", mixValue);
 
+            // initial identity matrix
+            glm::mat4 trans = glm::mat4(1.0f);
+            // move to  bottom-rigth corner
+            trans = glm::translate(trans, glm::vec3(0.3f, -0.3f, 0.0f));
+            // rotate by time
+            trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+            shader.setMat4("transform", trans);
+
             glBindVertexArray(VAO);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+            // init to identity matrix
+            trans = glm::mat4(1.0f);
+            // move to top-left corner
+            trans = glm::translate(trans, glm::vec3(-0.3f, 0.3f, 0.0f));
+            // scale over time
+            float scaleAmount = sin(glfwGetTime() / 2);
+            trans = glm::scale(trans, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
+
+            shader.setMat4("transform", trans);
+
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
