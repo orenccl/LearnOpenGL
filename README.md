@@ -7,5 +7,5 @@ Understand computer graphics by learning OpenGL
 ## Textures
 ![image](https://github.com/orenccl/LearnOpenGL/blob/master/result/Textures.gif)
 
-## TexturesTransformation
-![image](https://github.com/orenccl/LearnOpenGL/blob/master/result/TexturesTransformation.gif)
+## Transformation
+![image](https://github.com/orenccl/LearnOpenGL/blob/master/result/Transformation.gif)
