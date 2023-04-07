@@ -2,9 +2,9 @@
 #include <stb_image.h>
 
 #include "HelloTriangle/HelloTriangle.h"
-#include "Textures/Textures.h"
+#include "Sandbox/Sandbox.h"
 
 int main()
 {
-    return Textures::Main();
+    return Sandbox::Main();
 }
