@@ -8,6 +8,7 @@
 #include <iostream>
 #include "Sandbox.h"
 #include "../Shader.h"
+#include "../Camera.h"
 
 namespace Sandbox
 {
@@ -24,13 +25,7 @@ namespace Sandbox
     float mixValue = 0.2f;
 
     // camera
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-    glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-    float cameraYaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
-    float cameraPitch = 0.0f;
-    float fov = 45.0f;
+    Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
     bool firstMouse = true;
     float mouseLastX = SCR_WIDTH / 2.0;
@@ -235,11 +230,11 @@ namespace Sandbox
             shader.setFloat("mixValue", mixValue);
 
             // pass projection matrix to shader
-            glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+            glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
             shader.setMat4("projection", projection);
 
             // camera/view transformation
-            glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+            glm::mat4 view = camera.GetViewMatrix();
             shader.setMat4("view", view);
 
             // render boxes
@@ -297,22 +292,21 @@ namespace Sandbox
                 mixValue = 0.0f;
         }
 
-        const float cameraSpeed = 2.5f * deltaTime; // adjust accordingly
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         {
-            cameraPos += cameraSpeed * cameraFront;
+            camera.ProcessKeyboard(FORWARD, deltaTime);
         }
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         {
-            cameraPos -= cameraSpeed * cameraFront;
+            camera.ProcessKeyboard(BACKWARD, deltaTime);
         }
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
         {
-            cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+            camera.ProcessKeyboard(LEFT, deltaTime);
         }
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         {
-            cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+            camera.ProcessKeyboard(RIGHT, deltaTime);
         }
     }
 
@@ -327,35 +321,15 @@ namespace Sandbox
 
         float xoffset = xpos - mouseLastX;
         float yoffset = mouseLastY - ypos; // reversed since y-coordinates range from bottom to top
+
         mouseLastX = xpos;
         mouseLastY = ypos;
 
-        const float sensitivity = 0.1f;
-        xoffset *= sensitivity;
-        yoffset *= sensitivity;
-
-        cameraYaw += xoffset;
-        cameraPitch += yoffset;
-
-        if (cameraPitch > 89.0f)
-            cameraPitch = 89.0f;
-        if (cameraPitch < -89.0f)
-            cameraPitch = -89.0f;
-
-        glm::vec3 direction;
-        direction.x = cos(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
-        direction.y = sin(glm::radians(cameraPitch));
-        direction.z = sin(glm::radians(cameraYaw)) * cos(glm::radians(cameraPitch));
-        cameraFront = glm::normalize(direction);
+        camera.ProcessMouseMovement(xoffset, yoffset);
     }
 
     void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
     {
-        const float sensitivity = 2.0f;
-        fov -= (float)yoffset * sensitivity;
-        if (fov < 1.0f)
-            fov = 1.0f;
-        if (fov > 45.0f)
-            fov = 45.0f;
+        camera.ProcessMouseScroll(yoffset);
     }
 }

@@ -7,6 +7,7 @@
     <ClCompile Include="src\Sandbox\Sandbox.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="includes\glm\detail\glm.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\HelloTriangle\HelloTriangle.h" />
@@ -299,6 +300,7 @@
     <ClInclude Include="includes\glm\vector_relational.hpp" />
     <ClInclude Include="includes\KHR\khrplatform.h" />
     <ClInclude Include="includes\stb_image.h" />
+    <ClInclude Include="src\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="includes\glm\detail\func_common.inl" />

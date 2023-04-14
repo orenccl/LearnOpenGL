@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="includes\glm\detail\glm.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\HelloTriangle\HelloTriangle.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -314,6 +315,7 @@
     <ClInclude Include="includes\glm\vector_relational.hpp" />
     <ClInclude Include="includes\KHR\khrplatform.h" />
     <ClInclude Include="includes\stb_image.h" />
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\HelloTriangle\HelloTriangle.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\Sandbox\Sandbox.h" />

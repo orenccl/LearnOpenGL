@@ -1,7 +1,4 @@
 
-#ifndef SHADER_H
-#define SHADER_H
-
 #include <glad/glad.h> // include glad to get all the required OpenGL headers
 #include <glm/fwd.hpp>
 
@@ -36,5 +33,3 @@ private:
     // utility function for checking shader compilation/linking errors.
     void checkCompileErrors(unsigned int shader, std::string type);
 };
-
-#endif
